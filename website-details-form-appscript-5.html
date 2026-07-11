@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>טופס למילוי פרטי אתר | Yosef Omesi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;600;700&family=Playfair+Display:wght@500;600;700;800&family=Cormorant+Garamond:wght@500;600;700&family=Tangerine:wght@700&family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #050a12;
+    --bg-panel: #0a1420;
+    --bg-field: #081420;
+    --gold: #a3915f;
+    --gold-light: #c4b284;
+    --gold-deep: #4a4128;
+    --gold-mid: #8a7a4f;
+    --text: #ece7d8;
+    --text-muted: #948c7c;
+    --line: #16323a;
+    --error: #c2685a;
+    --ok: #7fae7a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse 65% 45% at 50% -8%, rgba(42,90,148,0.16), transparent 65%),
+      radial-gradient(ellipse 80% 60% at 50% 55%, rgba(30,66,112,0.10), transparent 70%),
+      radial-gradient(ellipse 90% 55% at 50% 108%, rgba(0,0,0,0.4), transparent),
+      var(--bg);
+    color:var(--text);
+    font-family:'Heebo', sans-serif;
+    min-height:100vh;
+    padding:0 0 60px;
+  }
+  .wrap{ max-width:760px; margin:0 auto; padding:0 20px; }
+
+  /* ---------- Brand / Logo ---------- */
+  .brand{
+    text-align:center;
+    padding:48px 20px 0;
+  }
+  .brand .logo-row{
+    display:flex; align-items:center; justify-content:center; gap:16px;
+  }
+  .brand .orn{
+    font-size:11px; color:var(--gold-deep); opacity:.8;
+    transform:translateY(-1px);
+  }
+  .brand .logo{
+    font-family:'Tangerine', 'Cormorant Garamond', serif;
+    font-weight:700;
+    font-size:clamp(32px,6vw,46px);
+    letter-spacing:1px;
+    background:linear-gradient(90deg, var(--gold-mid), var(--gold-light) 50%, var(--gold-mid));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    -webkit-text-stroke:0.6px var(--gold-mid);
+  }
+  .brand .tagline{
+    font-family:'Frank Ruhl Libre', 'Cormorant Garamond', serif;
+    font-weight:500;
+    font-size:13px;
+    letter-spacing:.4px;
+    color:var(--text-muted);
+    margin-top:9px;
+    opacity:.95;
+  }
+  .brand .brandline{
+    display:flex; align-items:center; gap:10px;
+    width:180px; margin:22px auto 0;
+  }
+  .brand .brandline .ln{
+    flex:1; height:1px;
+    background:linear-gradient(90deg, transparent, var(--gold-deep));
+  }
+  .brand .brandline .ln.right{ background:linear-gradient(90deg, var(--gold-deep), transparent); }
+  .brand .brandline .dot{ width:4px;height:4px; border-radius:50%; background:var(--gold); }
+
+  /* ---------- Header ---------- */
+  header{
+    padding:34px 20px 40px;
+    text-align:center;
+  }
+  h1{
+    font-family:'Frank Ruhl Libre','Playfair Display',serif;
+    font-weight:700;
+    font-size:clamp(22px,4vw,28px);
+    letter-spacing:.2px;
+    margin:0 0 10px;
+    background:linear-gradient(90deg, var(--gold-mid), var(--gold-light) 50%, var(--gold-mid));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  header p{
+    color:var(--text-muted);
+    font-size:14px;
+    max-width:420px;
+    margin:0 auto;
+    line-height:1.7;
+  }
+
+  /* ---------- Panel / form ---------- */
+  .panel{
+    background:linear-gradient(180deg, var(--bg), #040a12);
+    border:none;
+    border-radius:4px;
+    padding:30px 24px;
+    position:relative;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6);
+  }
+  .panel::before{
+    content:"";position:absolute; top:10px;left:10px;right:10px;bottom:10px;
+    border:none;
+    border-radius:2px;
+    pointer-events:none;
+  }
+  .section-title{
+    font-family:'Frank Ruhl Libre','Playfair Display',serif;
+    background:linear-gradient(90deg, var(--gold-mid), var(--gold-light) 50%, var(--gold-mid));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    font-size:16.5px;
+    font-weight:600;
+    margin:0 0 4px;
+  }
+  .section-sub{ color:var(--text-muted); font-size:12.5px; margin:0 0 16px; }
+  fieldset{ border:none; padding:0; margin:0 0 28px; }
+  fieldset:last-of-type{margin-bottom:8px;}
+
+  .field{ margin-bottom:14px; }
+  .field label{ display:block; font-size:13px; color:var(--text-muted); margin-bottom:6px; font-weight:500; }
+  .field label .req{ color:var(--gold-light); margin-inline-start:3px; }
+  .field input[type=text],
+  .field input[type=email],
+  .field input[type=tel],
+  .field input[type=url],
+  .field textarea{
+    width:100%; background:var(--bg-field); border:1px solid rgba(163,145,95,0.3); color:var(--text);
+    padding:9px 12px; border-radius:3px; font-family:'Heebo',sans-serif; font-size:14px;
+    transition:border-color .2s, box-shadow .2s;
+  }
+  .field textarea{ resize:vertical; min-height:80px; line-height:1.6; }
+  .field input:focus, .field textarea:focus{
+    outline:none; border-color:var(--gold); box-shadow:0 0 0 3px rgba(156,122,61,0.14);
+  }
+  .field input::placeholder, .field textarea::placeholder{ color:#4c5a56; font-size:13px; }
+  .row2{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:560px){ .row2{ grid-template-columns:1fr; } }
+
+  .errtext{ font-size:12px; color:var(--error); margin-top:6px; display:none; }
+  .field.invalid input, .field.invalid textarea{ border-color:var(--error); }
+  .field.invalid .errtext{ display:block; }
+
+  /* ---------- Upload ---------- */
+  .dropzone{
+    display:block; width:100%;
+    border:1px dashed var(--gold-deep); border-radius:4px; padding:26px 16px; text-align:center;
+    background:rgba(201,162,75,0.03); cursor:pointer; transition:border-color .2s, background .2s;
+  }
+  .dropzone:hover, .dropzone.drag{ border-color:var(--gold); background:rgba(201,162,75,0.07); }
+  .dropzone .icon{ font-size:26px; color:var(--gold); margin-bottom:8px; }
+  .dropzone strong{ color:var(--text); font-weight:600; }
+  .dropzone .sub{ color:var(--text-muted); font-size:13px; margin-top:4px; }
+  #fileInput{ display:none; }
+  .filelist{ margin-top:14px; display:flex; flex-direction:column; gap:8px; }
+  .filerow{
+    display:flex; align-items:center; justify-content:space-between;
+    background:var(--bg-field); border:1px solid rgba(163,145,95,0.3); border-radius:3px; padding:9px 12px; font-size:14px;
+  }
+  .filerow .fname{ display:flex; align-items:center; gap:8px; overflow:hidden; }
+  .filerow .fname span.nm{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:280px; }
+  .filerow .fsize{ color:var(--text-muted); font-size:11.5px; margin-inline-start:6px; }
+  .filerow button{ background:none; border:none; color:var(--error); cursor:pointer; font-size:16px; line-height:1; padding:2px 6px; }
+  .storagenote{ font-size:12.5px; color:var(--text-muted); margin-top:8px; }
+
+  /* ---------- Submit ---------- */
+  button.gold-btn{
+    width:100%;
+    background:linear-gradient(90deg,var(--gold-deep),var(--gold) 50%,var(--gold-light));
+    background-size:200% 100%; background-position:0% 0%;
+    color:#171307; border:none; padding:12px 18px; font-size:14.5px; font-weight:700;
+    font-family:'Heebo',sans-serif; border-radius:3px; cursor:pointer;
+    transition:background-position .35s ease, transform .15s ease; letter-spacing:.2px;
+  }
+  button.gold-btn:hover{ background-position:100% 0%; }
+  button.gold-btn:active{ transform:scale(.99); }
+  button.gold-btn:disabled{ opacity:.55; cursor:not-allowed; }
+  .ghost-btn{
+    background:none; border:1px solid var(--line); color:var(--text-muted);
+    padding:8px 14px; border-radius:3px; cursor:pointer; font-size:13px; font-family:'Heebo',sans-serif;
+  }
+  .ghost-btn:hover{ border-color:var(--gold-deep); color:var(--text); }
+  .formmsg{ margin-top:14px; font-size:12.5px; text-align:center; color:var(--error); display:none; }
+
+  /* ---------- Status / success screen ---------- */
+  .status-screen{ text-align:center; padding:20px 6px 4px; }
+  .seal{
+    width:66px;height:66px;margin:0 auto 18px;border-radius:50%;
+    border:1px solid var(--gold); display:flex;align-items:center;justify-content:center; position:relative;
+  }
+  .seal::before{ content:""; position:absolute; inset:7px; border:1px solid var(--gold-deep); border-radius:50%; }
+  .seal .mark{ font-size:23px; color:var(--gold-light); }
+  .status-screen h2{
+    font-family:'Frank Ruhl Libre','Playfair Display',serif;
+    font-size:19px; margin:0 0 10px;
+    background:linear-gradient(90deg, var(--gold-mid), var(--gold-light) 50%, var(--gold-mid));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .status-screen p{ color:var(--text-muted); font-size:13.5px; line-height:1.7; max-width:380px; margin:0 auto 20px; }
+  .badge{
+    display:inline-flex; align-items:center; gap:8px; border:1px solid var(--gold-deep); border-radius:20px;
+    padding:6px 14px; font-size:12px; color:var(--gold-light); margin-bottom:10px; background:rgba(156,122,61,0.07);
+  }
+  .badge .dot{ width:6px;height:6px;border-radius:50%; background:var(--gold); }
+
+  footer{ text-align:center; margin-top:40px; color:#3a4643; font-size:11.5px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="brand">
+    <div class="logo-row">
+      <span class="orn">◆</span>
+      <span class="logo">Yosef Omesi</span>
+      <span class="orn">◆</span>
+    </div>
+    <div class="tagline">בניית אתרים ודפי נחיתה לעסקים בעיצוב יוקרתי</div>
+    <div class="brandline"><span class="ln"></span><span class="dot"></span><span class="ln right"></span></div>
+  </div>
+
+  <header>
+    <h1>טופס למילוי פרטי אתר</h1>
+    <p>מלאו את הפרטים הבאים בקצב שלכם — כל שדה עוזר לנו לבנות עבורכם אתר שמייצג נאמנה את העסק שלכם.</p>
+  </header>
+
+  <div class="panel" id="formPanel"></div>
+
+  <footer>Yosef Omesi © <span id="year"></span></footer>
+</div>
+
+<script>
+(function(){
+  /* =====================================================================
+     הגדרה נדרשת: כתובת השליחה
+     האתר הזה סטטי (מתאים ל-GitHub Pages) ואינו מחובר לשרת של עצמו,
+     לכן השליחה מתבצעת אל Google Apps Script (חינמי לגמרי, בלי הרשמה
+     לשירות חיצוני נוסף — רק חשבון גוגל שכבר יש לכם).
+
+     איך להגדיר (חד פעמי):
+     1. פתחו גיליון Google Sheets חדש והוסיפו בשורה הראשונה כותרות עמודות:
+        תאריך | שם לקוח | שם עסק | כתובת עסק | מייל | וואטסאפ | פייסבוק |
+        אינסטגרם | יוטיוב | שירותים | אודות | עיצוב מצופה | קבצים | סטטוס
+     2. בגיליון: תוספים ← Apps Script, והדביקו את הקוד מהקובץ apps-script-code.gs
+     3. בקוד, שנו את YOUR_EMAIL לכתובת המייל שלכם
+     4. פרוס (Deploy) ← ניהול פריסות חדשות ← Web App
+        - הרשאת הרצה: אני (אתם)
+        - מי יכול לגשת: כל אחד
+     5. תקבלו כתובת URL — הדביקו אותה כאן במקום ה-placeholder למטה
+  ===================================================================== */
+  const FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbxHG1_liC5SfrMSepINynfsD4OogMDz4L7oQXKFqkWqpEqOh0ZGlnCVWRLHA5x5jXv8pQ/exec";
+
+  const MAX_TOTAL_FILE_BYTES = 4 * 1024 * 1024; // כ-4MB — Apps Script מוגבל בגודל בקשה כוללת
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const formPanel = document.getElementById('formPanel');
+  let selectedFiles = [];
+
+  function esc(s){
+    return (s||"").toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+  function fmtBytes(b){
+    if(b < 1024) return b + " B";
+    if(b < 1024*1024) return (b/1024).toFixed(0) + " KB";
+    return (b/1024/1024).toFixed(1) + " MB";
+  }
+
+  function renderForm(){
+    formPanel.innerHTML = `
+      <fieldset>
+        <div class="section-title">פרטי התקשרות</div>
+        <div class="section-sub">כדי שנוכל לחזור אליכם ולתאם את המשך התהליך</div>
+        <div class="row2">
+          <div class="field" data-f="clientName">
+            <label>שם הלקוח<span class="req">*</span></label>
+            <input type="text" id="clientName" placeholder="לדוגמה: דוד כהן">
+            <div class="errtext">שדה חובה</div>
+          </div>
+          <div class="field" data-f="businessName">
+            <label>שם העסק<span class="req">*</span></label>
+            <input type="text" id="businessName" placeholder="שם העסק שלכם">
+            <div class="errtext">שדה חובה</div>
+          </div>
+        </div>
+        <div class="field" data-f="businessAddress">
+          <label>כתובת העסק</label>
+          <input type="text" id="businessAddress" placeholder="עיר, רחוב ומספר">
+        </div>
+        <div class="row2">
+          <div class="field" data-f="email">
+            <label>מייל<span class="req">*</span></label>
+            <input type="email" id="email" placeholder="name@example.com">
+            <div class="errtext">יש להזין מייל תקין</div>
+          </div>
+          <div class="field" data-f="whatsapp">
+            <label>וואטסאפ<span class="req">*</span></label>
+            <input type="tel" id="whatsapp" placeholder="050-0000000">
+            <div class="errtext">שדה חובה</div>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <div class="section-title">נוכחות ברשתות</div>
+        <div class="section-sub">קישורים לעמודים קיימים, אם ישנם</div>
+        <div class="field" data-f="facebook">
+          <label>פייסבוק (קישור)</label>
+          <input type="url" id="facebook" placeholder="https://facebook.com/...">
+        </div>
+        <div class="row2">
+          <div class="field" data-f="instagram">
+            <label>אינסטגרם</label>
+            <input type="text" id="instagram" placeholder="@username או קישור">
+          </div>
+          <div class="field" data-f="youtube">
+            <label>יוטיוב</label>
+            <input type="text" id="youtube" placeholder="קישור לערוץ">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <div class="section-title">על העסק</div>
+        <div class="section-sub">כמה שנספר יותר טוב — זה מה שבונה את הקול של האתר</div>
+        <div class="field" data-f="service">
+          <label>אילו שירותים העסק נותן?<span class="req">*</span></label>
+          <textarea id="service" placeholder="תארו את השירותים / המוצרים המרכזיים"></textarea>
+          <div class="errtext">שדה חובה</div>
+        </div>
+        <div class="field" data-f="about">
+          <label>ספרו קצת עליכם ועל העסק</label>
+          <textarea id="about" placeholder="הסיפור שלכם, הניסיון, מה מייחד אתכם"></textarea>
+        </div>
+        <div class="field" data-f="design">
+          <label>איך הייתם רוצים שהאתר ייראה?</label>
+          <textarea id="design" placeholder="סגנון, צבעים, אתרים שאהבתם, תחושה כללית"></textarea>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <div class="section-title">עבודות לדוגמה</div>
+        <div class="section-sub">תמונות, לוגו, קבצי מוזיקה או כל חומר שיעזור לנו להכיר את הסגנון שלכם</div>
+        <label class="dropzone" id="dropzone" for="fileInput">
+          <div class="icon">⤒</div>
+          <div><strong>גררו קבצים לכאן</strong> או לחצו לבחירה</div>
+          <div class="sub">תמונות ואודיו</div>
+        </label>
+        <input type="file" id="fileInput" accept="image/*,audio/*" multiple>
+        <div class="filelist" id="fileList"></div>
+        <div class="storagenote" id="storageNote"></div>
+      </fieldset>
+
+      <div class="submitrow">
+        <button class="gold-btn" id="submitBtn" type="button">שליחת הטופס</button>
+        <div class="formmsg" id="formMsg"></div>
+      </div>
+    `;
+    wireForm();
+  }
+
+  function wireForm(){
+    const dropzone = document.getElementById('dropzone');
+    const fileInput = document.getElementById('fileInput');
+    dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('drag'); });
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag'));
+    dropzone.addEventListener('drop', e => {
+      e.preventDefault(); dropzone.classList.remove('drag');
+      addFiles(e.dataTransfer.files);
+    });
+    fileInput.addEventListener('change', e => addFiles(e.target.files));
+    document.getElementById('submitBtn').addEventListener('click', submitForm);
+  }
+
+  function totalFileBytes(){ return selectedFiles.reduce((s,f) => s + f.size, 0); }
+
+  function addFiles(fileListObj){
+    const files = Array.from(fileListObj).filter(f => f.type.startsWith('image') || f.type.startsWith('audio'));
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        selectedFiles.push({ name:file.name, type:file.type, size:file.size, dataUrl: reader.result });
+        renderFileList();
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function renderFileList(){
+    const list = document.getElementById('fileList');
+    list.innerHTML = selectedFiles.map((f,i) => `
+      <div class="filerow">
+        <div class="fname">
+          <span>${f.type.startsWith('audio') ? '🎵' : '🖼️'}</span>
+          <span class="nm">${esc(f.name)}</span>
+          <span class="fsize">${fmtBytes(f.size)}</span>
+        </div>
+        <button data-i="${i}" class="rmfile" type="button">✕</button>
+      </div>
+    `).join('');
+    list.querySelectorAll('.rmfile').forEach(btn => {
+      btn.addEventListener('click', () => {
+        selectedFiles.splice(parseInt(btn.dataset.i),1);
+        renderFileList();
+      });
+    });
+    const total = totalFileBytes();
+    const note = document.getElementById('storageNote');
+    note.textContent = total ? (fmtBytes(total) + " בסך הכול") : "";
+    note.style.color = total > MAX_TOTAL_FILE_BYTES ? 'var(--error)' : 'var(--text-muted)';
+  }
+
+  function validate(){
+    const required = ['clientName','businessName','email','whatsapp','service'];
+    let ok = true;
+    required.forEach(id => {
+      const field = document.querySelector(`.field[data-f="${id}"]`);
+      const val = document.getElementById(id).value.trim();
+      let valid = val.length > 0;
+      if(id === 'email' && valid) valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+      field.classList.toggle('invalid', !valid);
+      if(!valid) ok = false;
+    });
+    return ok;
+  }
+
+  function val(id){ return document.getElementById(id).value.trim(); }
+
+  async function submitForm(){
+    const msg = document.getElementById('formMsg');
+    msg.style.display = 'none';
+
+    if(FORM_ENDPOINT.includes('YOUR_FORM_ID')){
+      msg.textContent = "יש להגדיר תחילה כתובת שליחה (FORM_ENDPOINT) בקוד — ראו הערה בתחילת הסקריפט";
+      msg.style.display = 'block';
+      return;
+    }
+    if(!validate()){
+      msg.textContent = "יש להשלים את השדות המסומנים לפני השליחה";
+      msg.style.display = 'block';
+      return;
+    }
+    if(totalFileBytes() > MAX_TOTAL_FILE_BYTES){
+      msg.textContent = "סך הקבצים גדול מדי — נא להסיר קובץ אחד לפחות";
+      msg.style.display = 'block';
+      return;
+    }
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true; btn.textContent = "שולח...";
+
+    const payload = {
+      clientName: val('clientName'),
+      businessName: val('businessName'),
+      businessAddress: val('businessAddress'),
+      email: val('email'),
+      whatsapp: val('whatsapp'),
+      facebook: val('facebook'),
+      instagram: val('instagram'),
+      youtube: val('youtube'),
+      service: val('service'),
+      about: val('about'),
+      design: val('design'),
+      files: selectedFiles
+    };
+
+    try{
+      const res = await fetch(FORM_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // נמנעים מ-preflight CORS מול Apps Script
+        body: JSON.stringify(payload)
+      });
+      let ok = res.ok;
+      try{
+        const json = await res.json();
+        ok = json.status === 'ok';
+      }catch(parseErr){ /* אם אי אפשר לקרוא את התשובה, מסתמכים על res.ok בלבד */ }
+
+      if(ok){
+        renderStatusScreen(val('clientName'));
+      } else {
+        msg.textContent = "אירעה שגיאה בשליחה — נסו שוב בעוד רגע";
+        msg.style.display = 'block';
+        btn.disabled = false; btn.textContent = "שליחת הטופס";
+      }
+    } catch(e){
+      msg.textContent = "אירעה שגיאה בשליחה — בדקו את החיבור ונסו שוב";
+      msg.style.display = 'block';
+      btn.disabled = false; btn.textContent = "שליחת הטופס";
+    }
+  }
+
+  function renderStatusScreen(name){
+    formPanel.innerHTML = `
+      <div class="status-screen">
+        <div class="seal"><div class="mark">◆</div></div>
+        <h2>הטופס התקבל בהצלחה</h2>
+        <p>תודה, ${esc(name)}. הפרטים שלכם התקבלו ונמצאים כעת בעבודה. נחזור אליכם בהקדם.</p>
+        <div class="badge"><span class="dot"></span> סטטוס: בעבודה</div>
+      </div>
+    `;
+  }
+
+  renderForm();
+})();
+</script>
+</body>
+</html>
